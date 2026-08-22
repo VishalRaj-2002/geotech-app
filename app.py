@@ -19,12 +19,12 @@ conv = 98.0665 if unit_str == "kg/cm²" else 1.0
 
 st.sidebar.subheader("Lab Test Data Sets")
 
-# Default Dataframes
+# Updated Default Values
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
         "Set": [1, 2, 3],
         "σ3 (Cell)": [0.5, 1.0, 1.5],
-        "σ1 (Major)": [2.1, 4.1, 5.5]
+        "σ1 (Major)": [1.7, 3.4, 5.1]
     })
 else:
     default_df = pd.DataFrame({
@@ -35,8 +35,8 @@ else:
 
 edited_df = st.sidebar.data_editor(default_df, num_rows="dynamic")
 
-manual_c = st.sidebar.number_input(f"Manual c' Reading ({unit_str}):", value=0.18, step=0.01)
-manual_phi = st.sidebar.number_input("Manual φ' (Degrees):", value=29.5, step=0.1)
+manual_c = st.sidebar.number_input(f"Manual c' Reading ({unit_str}):", value=0.00, step=0.01)
+manual_phi = st.sidebar.number_input("Manual φ' (Degrees):", value=33.0, step=0.1)
 
 # Analysis Button
 if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
