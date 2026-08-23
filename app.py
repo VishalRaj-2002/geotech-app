@@ -6,10 +6,21 @@ import pandas as pd
 # Page Config
 st.set_page_config(page_title="Geotechnical Lab Verifier (IS 2720)", layout="wide")
 
+# App Header with Author Branding
 st.title("🏗️ Geotechnical Lab Verifier (IS 2720)")
+st.caption("Developed by: **Vishal Raj** | Research Scholar, IIT Hyderabad 🎓")
 st.write("Triaxial Compression & Direct Shear Test Verification Tool")
 
-# Sidebar - Test Controls
+st.markdown("---")
+
+# Sidebar - Test Controls & Developer Info
+st.sidebar.title("👨‍🔬 Developer Info")
+st.sidebar.info("""
+**Vishal Raj**  
+*Research Scholar @ IIT Hyderabad*  
+[LinkedIn Profile](https://www.linkedin.com/in/vishalraj-2002) 🔗
+""")
+
 st.sidebar.header("Test Inputs & Setup")
 
 test_type = st.sidebar.selectbox("Select Test:", ["Triaxial Compression Test", "Direct Shear Test"])
@@ -19,7 +30,7 @@ conv = 98.0665 if unit_str == "kg/cm²" else 1.0
 
 st.sidebar.subheader("Lab Test Data Sets")
 
-# Updated Default Values
+# Default Data
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
         "Set": [1, 2, 3],
@@ -135,3 +146,7 @@ if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
             st.success(f"**VERDICT:** {verdict}")
         else:
             st.error(f"**VERDICT:** {verdict}")
+
+# Footer Section
+st.markdown("---")
+st.markdown("Designed & Developed with ❤️ by **Vishal Raj** (Research Scholar @ IIT Hyderabad)")
