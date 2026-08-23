@@ -17,7 +17,7 @@ st.markdown("---")
 st.sidebar.title("👨‍🔬 Developer Info")
 st.sidebar.info("""
 **Vishal Raj**  
-*Research Scholar @ IIT Hyderabad*  
+*Research Scholar @ IIT Hyderabad, doing research under Prof. B.Munwar Basha*  
 [LinkedIn Profile](https://www.linkedin.com/in/vishalraj-2002) 🔗
 """)
 
