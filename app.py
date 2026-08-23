@@ -5,7 +5,7 @@ import pandas as pd
 
 # Page Config
 st.set_page_config(
-    page_title="Geotechnical Lab Verifier for Shear Strength tests of soil (IS 2720)",
+    page_title="Geotechnical Lab Verifier (IS 2720)",
     page_icon="🏗️",
     layout="wide",
     initial_sidebar_state="expanded"
