@@ -5,7 +5,7 @@ import pandas as pd
 
 # Page Config
 st.set_page_config(
-    page_title="Geotechnical Lab Verifier (IS 2720)",
+    page_title="Geotechnical Lab Verifier for Shear Strength tests of soil (IS 2720)",
     page_icon="🏗️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -80,7 +80,7 @@ st.markdown('<div class="sub-title">Soil Shear Strength Analysis & Verification 
 st.markdown("""
 <div class="custom-card" style="border-left: 5px solid #38bdf8; padding: 12px 20px;">
     <b>Developed by:</b> <span style="color: #38bdf8; font-weight: bold;">Vishal Raj</span> | 
-    <i>Research Scholar @ Indian Institute of Technology Hyderabad (IITH)</i> 🎓
+    <i>Research Scholar under Prof. B Munawar Basha @ Indian Institute of Technology Hyderabad (IITH)</i> 🎓
 </div>
 """, unsafe_allow_html=True)
 
