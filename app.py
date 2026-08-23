@@ -8,7 +8,7 @@ st.set_page_config(page_title="Geotechnical Lab Verifier (IS 2720)", layout="wid
 
 # App Header with Author Branding
 st.title("🏗️ Geotechnical Lab Verifier (IS 2720)")
-st.caption("Developed by: **Vishal Raj** | Research Scholar, IIT Hyderabad 🎓")
+st.caption("Developed by: **Vishal Raj** | Research Scholar, IIT Hyderabad, doing research under Prof. B.Munwar Basha🎓")
 st.write("Triaxial Compression & Direct Shear Test Verification Tool")
 
 st.markdown("---")
