@@ -23,14 +23,14 @@ st.sidebar.subheader("Lab Test Data Sets")
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
         "Set",
-        "σ3 (Cell)": [100.0, 200.0, 300.0],
-        "σ1 (Major)": [254.7, 404.7, 554.7]
+        "σ3 (Cell)"= [100.0, 200.0, 300.0],
+        "σ1 (Major)"= [254.7, 404.7, 554.7]
     })
 else:
     default_df = pd.DataFrame({
         "Set":,
-        "σ (Normal)": [0.5, 1.0, 1.5],
-        "τ (Shear)": [0.32, 0.50, 0.68]
+        "σ (Normal)"= [0.5, 1.0, 1.5],
+        "τ (Shear)"= [0.32, 0.50, 0.68]
     })
 
 edited_df = st.sidebar.data_editor(default_df, num_rows="dynamic")
