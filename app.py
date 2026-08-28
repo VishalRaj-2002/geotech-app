@@ -133,8 +133,7 @@ with tab1:
             centers = (s1 + s3) / 2.0
             radii = (s1 - s3) / 2.0
 
-            # Exact Mohr-Coulomb Tangent Fit via s1 vs s3 Regression:
-            # s1 = N_phi * s3 + 2 * c * sqrt(N_phi)
+            # Linear regression on s1 vs s3 space
             X_mat = np.column_stack([s3, np.ones_like(s3)])
             lstsq_res = np.linalg.lstsq(X_mat, s1, rcond=None)[0]
             
@@ -147,7 +146,7 @@ with tab1:
             
             c_calc = max(0.0, intercept_I / (2 * np.sqrt(N_phi)))
 
-            # Matplotlib Dark Styling
+            # Dark theme Matplotlib styling
             plt.style.use('dark_background')
             fig, ax = plt.subplots(figsize=(7, 5))
             fig.patch.set_facecolor('#1e293b')
