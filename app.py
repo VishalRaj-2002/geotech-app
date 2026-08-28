@@ -22,7 +22,7 @@ st.sidebar.subheader("Lab Test Data Sets")
 # Default Dataframes - FIXING LIST KEYS EXPLICITLY HERE
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
-        "Set":,
+        "Set",
         "σ3 (Cell)": [100.0, 200.0, 300.0],
         "σ1 (Major)": [254.7, 404.7, 554.7]
     })
