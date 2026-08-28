@@ -19,7 +19,7 @@ conv = 98.0665 if unit_str == "kg/cm²" else 1.0
 
 st.sidebar.subheader("Lab Test Data Sets")
 
-# Default Dataframes - EXPLICITLY FIXED SYNTAX HERE
+# Default Dataframes - FIXING LIST KEYS EXPLICITLY HERE
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
         "Set":,
@@ -51,22 +51,20 @@ if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
         centers = (s1 + s3) / 2.0
         radii = (s1 - s3) / 2.0
 
-        # p-q Best-fit Linear Regression (MIT Stress Space)
-        p = centers
-        q = radii
-        P = np.column_stack([p, np.ones_like(p)])
+        # Exact Geometric Tangent Regression: R = Xc * sin(phi) + c * cos(phi)
+        # Setting X matrix with centers and a constant column for intercept
+        X_mat = np.column_stack([centers, np.ones_like(centers)])
+        lstsq_res = np.linalg.lstsq(X_mat, radii, rcond=None)[0]
         
-        # Unpack least squares output properly
-        lstsq_res = np.linalg.lstsq(P, q, rcond=None)[0]
-        tan_alpha = lstsq_res[0]
-        a_pq = lstsq_res[1]
+        slope_m = lstsq_res[0]       # Equals sin(phi)
+        intercept_d = lstsq_res[1]   # Equals c * cos(phi)
 
-        # Transformation relations: sin(phi) = tan(alpha) AND c * cos(phi) = a_pq
-        sin_phi = np.clip(tan_alpha, 0.01, 0.99)
+        # Solving for true c' and phi' soil parameters
+        sin_phi = np.clip(slope_m, 0.01, 0.99)
         phi_rad = np.arcsin(sin_phi)
         phi_calc = np.degrees(phi_rad)
         
-        c_calc_kpa = max(0.0, a_pq / np.cos(phi_rad))
+        c_calc_kpa = max(0.0, intercept_d / np.cos(phi_rad))
         c_calc = c_calc_kpa / conv if unit_str == "kg/cm²" else c_calc_kpa
 
         # Plotting
