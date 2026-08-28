@@ -19,7 +19,7 @@ conv = 98.0665 if unit_str == "kg/cm²" else 1.0
 
 st.sidebar.subheader("Lab Test Data Sets")
 
-# Default Dataframes - FIXED SYNTAX HERE
+# Default Dataframes - EXPLICITLY FIXED SYNTAX HERE
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
         "Set":,
@@ -55,7 +55,11 @@ if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
         p = centers
         q = radii
         P = np.column_stack([p, np.ones_like(p)])
-        tan_alpha, a_pq = np.linalg.lstsq(P, q, rcond=None)[0]
+        
+        # Unpack least squares output properly
+        lstsq_res = np.linalg.lstsq(P, q, rcond=None)[0]
+        tan_alpha = lstsq_res[0]
+        a_pq = lstsq_res[1]
 
         # Transformation relations: sin(phi) = tan(alpha) AND c * cos(phi) = a_pq
         sin_phi = np.clip(tan_alpha, 0.01, 0.99)
@@ -94,7 +98,9 @@ if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
         tau = data[:, 2] * conv
 
         P = np.column_stack([sig, np.ones_like(sig)])
-        m, c_calc_kpa = np.linalg.lstsq(P, tau, rcond=None)[0]
+        lstsq_res = np.linalg.lstsq(P, tau, rcond=None)[0]
+        m = lstsq_res[0]
+        c_calc_kpa = lstsq_res[1]
 
         phi_rad = np.arctan(m)
         phi_calc = np.degrees(phi_rad)
