@@ -87,12 +87,11 @@ with st.sidebar:
     st.markdown("---")
     st.subheader("3️⃣ Test Data Entry")
 
-    # Fixed syntax error in default_df (Added [1, 2, 3] to "Set")
     if test_type == "Triaxial Compression Test":
         default_df = pd.DataFrame({
             "Set": [1, 2, 3],
-            "σ3 (Cell)": [0.5, 1.0, 1.5] if unit_str == "kg/cm²" else [50.0, 100.0, 150.0],
-            "σ1 (Major)": [1.7, 3.4, 5.1] if unit_str == "kg/cm²" else [170.0, 340.0, 510.0]
+            "σ3 (Cell)": [0.5, 1.0, 1.5] if unit_str == "kg/cm²" else [100.0, 200.0, 300.0],
+            "σ1 (Major)": [1.7, 3.4, 5.1] if unit_str == "kg/cm²" else [254.7, 404.7, 554.7]
         })
     else:
         default_df = pd.DataFrame({
@@ -105,8 +104,8 @@ with st.sidebar:
 
     st.markdown("---")
     st.subheader("4️⃣ Manual Observations")
-    manual_c = st.number_input(f"Manual c' Reading ({unit_str}):", value=0.00, step=0.01)
-    manual_phi = st.number_input("Manual φ' (Degrees):", value=33.0, step=0.1)
+    manual_c = st.number_input(f"Manual c' Reading ({unit_str}):", value=40.0 if unit_str == "kPa" else 0.40, step=0.1)
+    manual_phi = st.number_input("Manual φ' (Degrees):", value=26.5, step=0.1)
 
     st.markdown("---")
     analyze_btn = st.button("🚀 ANALYZE & VERIFY", use_container_width=True, type="primary")
@@ -134,17 +133,19 @@ with tab1:
             centers = (s1 + s3) / 2.0
             radii = (s1 - s3) / 2.0
 
-            # Linear regression: R = Xc * sin(phi) + c * cos(phi)
-            X_mat = np.column_stack([centers, np.ones_like(centers)])
-            lstsq_res = np.linalg.lstsq(X_mat, radii, rcond=None)[0]
+            # Exact Mohr-Coulomb Tangent Fit via s1 vs s3 Regression:
+            # s1 = N_phi * s3 + 2 * c * sqrt(N_phi)
+            X_mat = np.column_stack([s3, np.ones_like(s3)])
+            lstsq_res = np.linalg.lstsq(X_mat, s1, rcond=None)[0]
             
-            slope_m = lstsq_res[0]       # sin(phi)
-            intercept_d = lstsq_res[1]   # c * cos(phi)
+            N_phi = max(1.001, lstsq_res[0])
+            intercept_I = lstsq_res[1]
 
-            sin_phi = np.clip(slope_m, 0.01, 0.99)
-            phi_rad = np.arcsin(sin_phi)
+            sin_phi = (N_phi - 1) / (N_phi + 1)
+            phi_rad = np.arcsin(np.clip(sin_phi, 0.0, 0.99))
             phi_calc = np.degrees(phi_rad)
-            c_calc = max(0.0, intercept_d / np.cos(phi_rad))
+            
+            c_calc = max(0.0, intercept_I / (2 * np.sqrt(N_phi)))
 
             # Matplotlib Dark Styling
             plt.style.use('dark_background')
@@ -233,7 +234,7 @@ with tab1:
 with tab2:
     st.markdown("""
     ### 📚 Benchmark Validation
-    This application utilizes linear regression in $p-q$ stress space and transformed failure envelopes validated against standard benchmark problems from:
+    This application utilizes linear regression in $\sigma_1 - \sigma_3$ stress space to compute $N_\phi$ and transformed failure envelopes validated against standard benchmark problems from:
     * **Braja M. Das** - *Principles of Geotechnical Engineering*
     * **Dr. B. C. Punmia** - *Soil Mechanics and Foundations*
     * **Gopal Ranjan & A. S. R. Rao** - *Basic and Applied Soil Mechanics*
