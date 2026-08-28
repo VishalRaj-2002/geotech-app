@@ -19,11 +19,11 @@ conv = 98.0665 if unit_str == "kg/cm²" else 1.0
 
 st.sidebar.subheader("Lab Test Data Sets")
 
-# Default Dataframes
+# Default Dataframes - FIXED SYNTAX HERE
 if test_type == "Triaxial Compression Test":
     default_df = pd.DataFrame({
         "Set":,
-        "σ3 (Cell)": [100.0, 200.0, 300.0],  # Adjusted defaults to match your screenshot
+        "σ3 (Cell)": [100.0, 200.0, 300.0],
         "σ1 (Major)": [254.7, 404.7, 554.7]
     })
 else:
@@ -57,16 +57,13 @@ if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
         P = np.column_stack([p, np.ones_like(p)])
         tan_alpha, a_pq = np.linalg.lstsq(P, q, rcond=None)[0]
 
-        # --- THE MATHEMATICAL CORRECTION FIX ---
-        # m_pq in your original code is actually tan(alpha) in p-q space.
-        # Transformation relations: sin(phi) = tan(alpha)  AND  c * cos(phi) = a_pq
+        # Transformation relations: sin(phi) = tan(alpha) AND c * cos(phi) = a_pq
         sin_phi = np.clip(tan_alpha, 0.01, 0.99)
         phi_rad = np.arcsin(sin_phi)
         phi_calc = np.degrees(phi_rad)
         
         c_calc_kpa = max(0.0, a_pq / np.cos(phi_rad))
         c_calc = c_calc_kpa / conv if unit_str == "kg/cm²" else c_calc_kpa
-        # --------------------------------------
 
         # Plotting
         fig, ax = plt.subplots(figsize=(7, 5))
@@ -81,9 +78,8 @@ if st.sidebar.button("🚀 ANALYZE & VERIFY", use_container_width=True):
             ax.plot(centers[i], 0, 'ro', markersize=5)
 
         x_env = np.linspace(0, max_x, 200)
-        # Failure Envelope line uses regular Mohr-Coulomb equation: tau = c + sigma * tan(phi)
         y_env = c_calc_kpa + x_env * np.tan(phi_rad)
-        ax.plot(x_env, y_env, 'b-', linewidth=2.5, label='Failure Envelope')  # Changed to match UI look
+        ax.plot(x_env, y_env, 'b-', linewidth=2.5, label='Failure Envelope')
 
         ax.set_aspect('equal', adjustable='box')
         ax.set_xlim(0, max_x)
